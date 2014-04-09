@@ -1,0 +1,4 @@
+--require test/setup
+--reporter dot
+--check-leaks
+--recursive

@@ -8,7 +8,7 @@
   },
   "version": "0.0.1",
   "license": "MIT",
-  "main": "lib/fless.js",
+  "main": "lib/Fless.js",
   "dependencies": {
     "zmq": "^2.6.0"
   },

@@ -6,11 +6,20 @@ NODE_VERSION='v0.10.26'
 
 # bin NPM modules local path
 echo 'export PATH=$PATH:node_modules/.bin:node_modules/bin' >> ~/.profile
+
+# run as development env
+echo "export NODE_ENV=development" >> ~/.profile
+
+# project dir as session default
+echo "cd $PROJECT_PATH" >> ~/.profile
+
+# apply .profile changes
 source ~/.profile
 
-# Fix permissions for NPM
-chgrp -R vagrant /usr/local
-chmod -R g+w /usr/local
+# take ownership of the folders that npm/node use
+sudo mkdir -p /usr/local/{share/man,bin,lib/node,include/node}
+sudo chown -R $USER /usr/local/{share/man,bin,lib/node,include/node}
+sudo chown -R $USER $ROOT_PATH
 
 # update apt-get
 sudo apt-get update
@@ -35,7 +44,7 @@ sudo setcap cap_net_bind_service=+ep /usr/local/bin/node
 sudo apt-get install libtool autoconf automake uuid-dev e2fsprogs
 cd ~ && git clone git://github.com/zeromq/libzmq.git && cd libzmq
 ./autogen.sh
-./configure
+./configure --with-pgm
 make
 sudo make install
 sudo ldconfig -v

@@ -2,16 +2,17 @@
 Frictionless monitored flow manager
 
 ## Features
-* Graph monitoring
-  * Structure
-  * Processes
-    * Properties
-    * Vital signals
-  * Sockets
-    * Properties
-    * Status
-    * Activities
-    * Data sampling
+
+Graph monitoring:
+
+* Datacenters
+  * Machines
+    * Fless instances
+      * Properties _(pid, alias, cwd)_
+      * Vital signals _(memory, disk, etc)_
+      * Sockets
+        * Properties _(type, status)_
+        * Activities _(status change, IO, data sampling)_
 
 ## Dependencies
 * [ZeroMQ](http://www.zeromq.org)

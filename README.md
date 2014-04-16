@@ -1,6 +1,18 @@
 # fless
 Frictionless monitored flow manager
 
+## Features
+* Graph monitoring
+  * Structure
+  * Processes
+    * Properties
+    * Vital signals
+  * Sockets
+    * Properties
+    * Status
+    * Activities
+    * Data sampling
+
 ## Dependencies
 * [ZeroMQ](http://www.zeromq.org)
 

@@ -1,18 +1,76 @@
 # fless
 Frictionless monitored flow manager
 
-## Features
+## Structure
+* Machine
+  * Fless instances
+    * Sockets
+      * Messages
 
-Graph monitoring:
+## Monitoring data
 
-* Datacenters
-  * Machines
-    * Fless instances
-      * Properties _(pid, alias, cwd)_
-      * Vital signals _(memory, disk, etc)_
-      * Sockets
-        * Properties _(type, status)_
-        * Activities _(status change, IO, data sampling)_
+### Data structure
+* Machine
+  * id
+  * _disk_ (HOT DATA)
+  * _memory_ (HOT DATA)
+  * _load_ (HOT DATA)
+  * Fless instances
+    * id
+    * alias
+    * _process_
+      * pid
+      * cwd
+      * argv
+      * _memory_ (HOT DATA)
+      * _load_ (HOT DATA)
+    * _Sockets_
+      * type
+      * _status_ (HOT DATA)
+      * _Messages_ (HOT DATA)
+        * count
+        * _io data sample_
+
+### Cold data
+[ Instance ] PUB -> SUB [ Monitor ]
+
+* Machine
+  * id
+  * Fless instances
+    * id
+    * alias
+    * _process_
+      * pid
+      * cwd
+      * argv
+    * _Sockets_
+      * type
+
+### Hot data
+[ Instance ] RES <- REQ [ Monitor ]
+
+* machine
+  * disk
+  * memory
+  * load
+  * processes
+    * memory
+    * load
+  * instances
+    * sockets
+      * status
+      * messages
+        * count
+        * sampling
+
+### Hotest data (each event)
+[ Instance ] PUB -> SUB [ Monitor ]
+
+* machine up
+* machine error
+* instance up
+* instance error
+* socket status change
 
 ## Dependencies
 * [ZeroMQ](http://www.zeromq.org)
@@ -28,7 +86,7 @@ producer.js
 var Fless = require('fless');
 var flow = new Fless('producer');
 var sock = flow.socket('push');
-sock.bindSync(3000);
+sock.bindSync('tcp://*:3000');
 setInterval(function(){
   sock.send('hello');
 }, 150);
@@ -39,7 +97,7 @@ worker.js
 var Fless = require('fless');
 var flow = new Fless('worker');
 var sock = flow.socket('pull');
-sock.connect(3000);
+sock.connect('tcp://*:3000');
 sock.on('message', function(msg){
   console.log('work: %s', msg.toString());
 });

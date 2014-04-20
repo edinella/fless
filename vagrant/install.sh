@@ -37,7 +37,7 @@ cd /opt/node
 make && make install
 
 # grant node access to port 80
-apt-get install libcap2-bin
+sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/local/bin/node
 
 # install ZMQ
@@ -49,9 +49,6 @@ make
 sudo make install
 sudo ldconfig -v
 cd .. && rm -rf libzmq
-
-# install mongodb
-apt-get install -y mongodb-10gen=$MONGO_VERSION
 
 # project dependencies
 cd $PROJECT_PATH && npm install

@@ -10,8 +10,7 @@
   "license": "MIT",
   "main": "lib/Fless.js",
   "dependencies": {
-    "zmq": "^2.6.0",
-    "cuid": "^1.2.4"
+    "zmq": "^2.6.0"
   },
   "devDependencies": {
     "mocha": "^1.18.2",

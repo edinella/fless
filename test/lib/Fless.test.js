@@ -8,8 +8,11 @@ function rand(){
 
 describe('Fless instance', function(){
   var flow;
-  beforeEach(function(){
-    flow = new Fless('fless'+rand());
+  beforeEach(function(done){
+    new Fless('fless'+rand(), null, function(err, instance){
+      flow = instance;
+      done();
+    });
   });
 
   it('should generate a object with same properties that ZMQ', function(){

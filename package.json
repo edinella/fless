@@ -8,18 +8,31 @@
   },
   "version": "0.0.1",
   "license": "MIT",
+  "preferGlobal": "true",
+  "bin": {
+    "fless": "./bin/fless"
+  },
   "main": "lib/Fless.js",
   "dependencies": {
     "zmq": "^2.6.0",
-    "cuid": "^1.2.4"
+    "cuid": "^1.2.4",
+    "commander": "^2.2.0",
+    "npm": "^1.4.7"
   },
   "devDependencies": {
     "mocha": "^1.18.2",
     "chai": "^1.9.1",
-    "sinon": "^1.9.1"
+    "sinon": "^1.9.1",
+    "marked-man": "^0.1.1"
+  },
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib",
+    "man": "./man"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "gen-man": "./node_modules/marked-man/bin/marked-man README.md > man/fless.1"
   },
   "keywords": [
     "flow",
@@ -34,6 +47,14 @@
     "ømq",
     "flow control",
     "queue",
-    "kue"
+    "kue",
+    "cli",
+    "sysadmin",
+    "tools",
+    "monitoring",
+    "cluster",
+    "clustering",
+    "devops",
+    "dev ops"
   ]
 }

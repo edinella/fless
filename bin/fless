@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+
+var pkg = require('../package');
+var CLI = require('../lib/CLI');
+
+program.version(pkg.version);
+
+program.command('list [path]')
+  .option('-p, --path', 'monitoring channel path')
+  .description('        list all Fless instances')
+  .action(CLI.list);
+
+program.command('ls')
+  .description('(alias) list all Fless instances')
+  .action(CLI.list);
+
+program.command('l')
+  .description('(alias) list all Fless instances')
+  .action(CLI.list);
+
+program.command('status')
+  .description('(alias) list all Fless instances')
+  .action(CLI.list);
+
+program.parse(process.argv);

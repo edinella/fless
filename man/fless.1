@@ -1,0 +1,275 @@
+.TH "FLESS" "" "April 2014" "" ""
+.SH "NAME"
+\fBfless\fR
+.P
+Frictionless monitored flow manager
+.SH Structure
+.RS 0
+.IP \(bu 2
+Machine
+.RS 0
+.IP \(bu 2
+Fless instances
+.RS 0
+.IP \(bu 2
+Sockets
+.RS 0
+.IP \(bu 2
+Messages
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+.SH Monitoring data
+.SS Data structure
+.RS 0
+.IP \(bu 2
+Machine
+.RS 0
+.IP \(bu 2
+id
+.IP \(bu 2
+\fIdisk\fR (HOT DATA)
+.IP \(bu 2
+\fImemory\fR (HOT DATA)
+.IP \(bu 2
+\fIload\fR (HOT DATA)
+.IP \(bu 2
+Fless instances
+.RS 0
+.IP \(bu 2
+id
+.IP \(bu 2
+alias
+.IP \(bu 2
+\fIprocess\fR
+.RS 0
+.IP \(bu 2
+pid
+.IP \(bu 2
+cwd
+.IP \(bu 2
+argv
+.IP \(bu 2
+\fImemory\fR (HOT DATA)
+.IP \(bu 2
+\fIload\fR (HOT DATA)
+
+.RE
+.IP \(bu 2
+\fISockets\fR
+.RS 0
+.IP \(bu 2
+type
+.IP \(bu 2
+\fIstatus\fR (HOT DATA)
+.IP \(bu 2
+\fIMessages\fR (HOT DATA)
+.RS 0
+.IP \(bu 2
+count
+.IP \(bu 2
+\fIio data sample\fR
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+.SS Cold data
+.P
+[ Instance ] PUB \-> SUB [ Monitor ]
+.RS 0
+.IP \(bu 2
+Machine
+.RS 0
+.IP \(bu 2
+id
+.IP \(bu 2
+Fless instances
+.RS 0
+.IP \(bu 2
+id
+.IP \(bu 2
+alias
+.IP \(bu 2
+\fIprocess\fR
+.RS 0
+.IP \(bu 2
+pid
+.IP \(bu 2
+cwd
+.IP \(bu 2
+argv
+
+.RE
+.IP \(bu 2
+\fISockets\fR
+.RS 0
+.IP \(bu 2
+type
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+.SS Hot data
+.P
+[ Instance ] RES <\- REQ [ Monitor ]
+.RS 0
+.IP \(bu 2
+machine
+.RS 0
+.IP \(bu 2
+disk
+.IP \(bu 2
+memory
+.IP \(bu 2
+load
+.IP \(bu 2
+processes
+.RS 0
+.IP \(bu 2
+memory
+.IP \(bu 2
+load
+
+.RE
+.IP \(bu 2
+instances
+.RS 0
+.IP \(bu 2
+sockets
+.RS 0
+.IP \(bu 2
+status
+.IP \(bu 2
+messages
+.RS 0
+.IP \(bu 2
+count
+.IP \(bu 2
+sampling
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+
+.RE
+.SS Hotest data (each event)
+.P
+[ Instance ] PUB \-> SUB [ Monitor ]
+.RS 0
+.IP \(bu 2
+machine up
+.IP \(bu 2
+machine error
+.IP \(bu 2
+instance up
+.IP \(bu 2
+instance error
+.IP \(bu 2
+socket status change
+
+.RE
+.SH Dependencies
+.RS 0
+.IP \(bu 2
+ZeroMQ \fIhttp://www\.zeromq\.org\fR
+
+.RE
+.SH Installation & usage
+.P
+.RS 2
+.EX
+npm install \-\-save fless
+.EE
+.RE
+.P
+producer\.js
+.P
+.RS 2
+.EX
+var Fless = require(\'fless\');
+var flow = new Fless(\'producer\');
+var sock = flow\.socket(\'push\');
+sock\.bindSync(\'tcp://*:3000\');
+setInterval(function(){
+  sock\.send(\'hello\');
+}, 150);
+.EE
+.RE
+.P
+worker\.js
+.P
+.RS 2
+.EX
+var Fless = require(\'fless\');
+var flow = new Fless(\'worker\');
+var sock = flow\.socket(\'pull\');
+sock\.connect(\'tcp://*:3000\');
+sock\.on(\'message\', function(msg){
+  console\.log(\'work: %s\', msg\.toString());
+});
+.EE
+.RE
+.P
+monitor\.js
+.P
+.RS 2
+.EX
+var Fless = require(\'fless\');
+var flow = new Fless(\'monitor\');
+var handle = Fless\.panel(9000);
+flow\.monitor(handle);
+flow\.monitor(function(){
+  this\.on(\'message\', function(){});
+});
+.EE
+.RE
+.SH Contribute
+.P
+Environment setup instructions for developing and testing
+.SS Dependencies
+.RS 0
+.IP \(bu 2
+GIT \fIhttp://git\-scm\.com\fR
+.IP \(bu 2
+Vagrant \fIhttp://vagrantup\.com\fR
+.IP \(bu 2
+VirtualBox \fIhttp://virtualbox\.org\fR
+
+.RE
+.SS Installation
+.P
+.RS 2
+.EX
+git clone https://github\.com/edinella/fless\.git && cd fless
+
+vagrant up
+vagrant ssh
+.EE
+.RE
+.SS Testing
+.P
+.RS 2
+.EX
+npm test
+.EE
+.RE
+
